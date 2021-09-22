@@ -21,9 +21,10 @@ class CustomLoginView(LoginView):
     def get_success_url(self):        # When user logged in, redirect to tasks page
         return reverse_lazy('tasks')
 
+
 class RegisterPage(FormView):
     template_name = 'base/register.html'
-    form_class = UserCreationForm
+    form_class = UserCreationForm     # A form to creat users
     redirect_authenticated_user = True
     success_url = reverse_lazy('tasks')
 
@@ -48,7 +49,7 @@ class TaskList(LoginRequiredMixin, ListView):     # By default django looks for 
     def get_context_data(self, **kwargs):         # Each user can only see their tasks
         context = super().get_context_data(**kwargs)
         context['tasks'] = context['tasks'].filter(user=self.request.user)
-        context['count'] = context['tasks'].filter(complete=False).count()
+        context['count'] = context['tasks'].filter(complete=False).count()  # count is a variable in task_list.html
         #Search functionality
         search_input = self.request.GET.get('search-area') or '' # search-area is defined in html form
         if search_input:

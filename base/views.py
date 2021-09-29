@@ -24,7 +24,7 @@ class CustomLoginView(LoginView):
 
 class RegisterPage(FormView):
     template_name = 'base/register.html'
-    form_class = UserCreationForm     # A form to creat users
+    form_class = UserCreationForm     # A form to create users
     redirect_authenticated_user = True
     success_url = reverse_lazy('tasks')
 
@@ -44,8 +44,10 @@ class RegisterPage(FormView):
 class TaskList(LoginRequiredMixin, ListView):     # By default django looks for task(model name)_list.html template
     model = Task                                  # LoginRequiredMixin - Restriction if user is not logged in. if someone wants to see detail view of an object
                                                   # but is not logged in, redirect to login page which is set in settings.py
-    context_object_name = 'tasks'                 # overriding default name for queryset - default name is object_list
+    context_object_name = 'tasks'                 # overriding default name for queryset - default name is object_list or object
 
+
+    # get_context_data = include additional data
     def get_context_data(self, **kwargs):         # Each user can only see their tasks
         context = super().get_context_data(**kwargs)
         context['tasks'] = context['tasks'].filter(user=self.request.user)
@@ -58,6 +60,7 @@ class TaskList(LoginRequiredMixin, ListView):     # By default django looks for 
 
         context['search_input'] = search_input
         return context
+
 
 class TaskDetail(LoginRequiredMixin, DetailView): # By default looks for task(model name)_detail.html template -
                                                   # LoginRequiredMixin : if someone wants to see detail view of an object

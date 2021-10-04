@@ -6,7 +6,7 @@ class Task(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
     complete = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)    #Time that task was created
+    created = models.DateTimeField(auto_now_add=True)    #Time that task was created - this field will be hidden
 
     def __str__(self):
         return self.title

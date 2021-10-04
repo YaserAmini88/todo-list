@@ -30,7 +30,7 @@ class RegisterPage(FormView):
 
     def form_valid(self, form):   # form functionality
         user = form.save()
-        if user is not None:       #after creation of user login and redirect it.
+        if user is not None:       #after creation of user, login and redirect it.
             login(self.request, user)
         return super(RegisterPage, self).form_valid(form)
 
@@ -51,7 +51,7 @@ class TaskList(LoginRequiredMixin, ListView):     # By default django looks for 
     def get_context_data(self, **kwargs):         # Each user can only see their tasks
         context = super().get_context_data(**kwargs)
         context['tasks'] = context['tasks'].filter(user=self.request.user)
-        context['count'] = context['tasks'].filter(complete=False).count()  # count is a variable in task_list.html
+        context['count'] = context['tasks'].filter(complete=False).count()  # count is been used in task_list.html
         #Search functionality
         search_input = self.request.GET.get('search-area') or '' # search-area is defined in html form
         if search_input:
@@ -72,7 +72,7 @@ class TaskDetail(LoginRequiredMixin, DetailView): # By default looks for task(mo
 class TaskCreate(LoginRequiredMixin, CreateView): #Create an object in db - By default it looks for task(model_name)_form.html template.
     model = Task
     #form_class = TaskForm       => Create our own model form
-    fields = ['user', 'title','description', 'complete']   # Remove user field - Because of def form_valid
+    fields = ['user','title','description', 'complete']   # Remove user field - Because of def form_valid
     success_url = reverse_lazy('tasks') #If everything goes ok redirect to tasks, which is defined in "name" filed in urls file.
 
     # Each user can only add tasks for itself not others - User field in add task must be equal to logged in user
